@@ -51,14 +51,22 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.androidx.media3.exoplayer)
+            implementation(libs.androidx.media3.exoplayer.dash)
+            implementation(libs.androidx.media3.ui)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
+            implementation(libs.android.driver)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.vlcj)
+            implementation(libs.native.driver)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.native.driver)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -71,6 +79,8 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.runtime)
+            implementation(libs.kotlinx.datetime)
             implementation(libs.moko.mvvm.core)
             implementation(libs.moko.mvvm.compose)
             implementation(libs.kamel)

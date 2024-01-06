@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.sqlDelight)
 }
 
 kotlin {
@@ -115,6 +116,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            pickFirsts += "META-INF/versions/9/previous-compilation-data.bin"
         }
     }
     buildTypes {
@@ -146,3 +148,9 @@ compose.desktop {
 //compose.experimental {
 //    web.application {}
 //}
+
+sqldelight {
+    database("AppDatabase") {
+        packageName = "sqlfiles"
+    }
+}

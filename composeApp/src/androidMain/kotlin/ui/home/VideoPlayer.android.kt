@@ -33,64 +33,64 @@ internal actual fun VideoPlayerImpl(
     modifier: Modifier,
     onFinish: (() -> Unit)?
 ) {
-    val s = ExoPlayer.Builder(LocalContext.current).build()
-    val factory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return VideoPlaybackViewModel(s) as T
-        }
-    }
-    val viewModelPlayer: VideoPlaybackViewModel = viewModel(
-        factory = factory
-    )
-    viewModelPlayer.playVideo(Uri.parse(url))
-    val player = s
-    var lifecycle by remember {
-        mutableStateOf(Lifecycle.Event.ON_CREATE)
-    }
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            lifecycle = event
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-    AndroidView(modifier = modifier, factory = { context ->
-        PlayerView(context).apply {
-            this.player = player
-        }
-    }, update = {
-        when (lifecycle) {
-            Lifecycle.Event.ON_START -> {
-                if (isResumed) {
-                    it.onResume()
-                    player.play()
-                }
-            }
-
-            Lifecycle.Event.ON_RESUME -> {
-                it.onResume()
-                player.play()
-            }
-
-            Lifecycle.Event.ON_PAUSE -> {
-                it.onPause()
-                player.pause()
-            }
-
-            Lifecycle.Event.ON_STOP -> {
-                it.onPause()
-                player.pause()
-            }
-
-            Lifecycle.Event.ON_DESTROY -> {
-                player.release()
-            }
-
-            else -> Unit
-        }
-    })
+//    val s = ExoPlayer.Builder(LocalContext.current).build()
+//    val factory = object : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            return VideoPlaybackViewModel(s) as T
+//        }
+//    }
+//    val viewModelPlayer: VideoPlaybackViewModel = viewModel(
+//        factory = factory
+//    )
+//    viewModelPlayer.playVideo(Uri.parse(url))
+//    val player = s
+//    var lifecycle by remember {
+//        mutableStateOf(Lifecycle.Event.ON_CREATE)
+//    }
+//    val lifecycleOwner = LocalLifecycleOwner.current
+//    DisposableEffect(lifecycleOwner) {
+//        val observer = LifecycleEventObserver { _, event ->
+//            lifecycle = event
+//        }
+//        lifecycleOwner.lifecycle.addObserver(observer)
+//        onDispose {
+//            lifecycleOwner.lifecycle.removeObserver(observer)
+//        }
+//    }
+//    AndroidView(modifier = modifier, factory = { context ->
+//        PlayerView(context).apply {
+//            this.player = player
+//        }
+//    }, update = {
+//        when (lifecycle) {
+//            Lifecycle.Event.ON_START -> {
+//                if (isResumed) {
+//                    it.onResume()
+//                    player.play()
+//                }
+//            }
+//
+//            Lifecycle.Event.ON_RESUME -> {
+//                it.onResume()
+//                player.play()
+//            }
+//
+//            Lifecycle.Event.ON_PAUSE -> {
+//                it.onPause()
+//                player.pause()
+//            }
+//
+//            Lifecycle.Event.ON_STOP -> {
+//                it.onPause()
+//                player.pause()
+//            }
+//
+//            Lifecycle.Event.ON_DESTROY -> {
+//                player.release()
+//            }
+//
+//            else -> Unit
+//        }
+//    })
 
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import presentation.DatabaseDriverFactory
 import presentation.TVViewModel
 import ui.home.AppBarMenu
 import ui.home.AppLogo
@@ -32,15 +33,15 @@ import ui.home.TabItem
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun App() {
+fun App(databaseDriverFactory: DatabaseDriverFactory) {
     val tvViewModel = getViewModel(
         key = Unit,
         factory = viewModelFactory {
-            TVViewModel()
+            TVViewModel(databaseDriverFactory)
         }
     )
     LaunchedEffect(tvViewModel) {
-        tvViewModel.updateChannels()
+        tvViewModel.updateChannels(false)
     }
     val channelState by tvViewModel.channelState.collectAsState()
     var selectedChannel by remember { mutableStateOf(channelState.firstOrNull()?.id) }
@@ -68,8 +69,8 @@ fun App() {
                         .padding(innerPadding),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    val stream = selectedChannel?.let { tvViewModel.getStreamLinkByChannelId(it) }
-                    AppVideo(stream)
+                    val Channel = selectedChannel?.let { tvViewModel.getStreamLinkByChannelId(it) }
+                    AppVideo(Channel)
                     LazyVerticalStaggeredGrid(
                         columns = StaggeredGridCells.Adaptive(200.dp),
                         verticalItemSpacing = 4.dp,

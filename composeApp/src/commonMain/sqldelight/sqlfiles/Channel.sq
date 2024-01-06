@@ -1,0 +1,68 @@
+CREATE TABLE Channel (
+    id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    country TEXT NOT NULL,
+    categories TEXT NOT NULL,
+    languages TEXT NOT NULL,
+    is_nsfw INTEGER NOT NULL,
+    launched TEXT,
+    closed TEXT,
+    network TEXT,
+    owners TEXT,
+    replaced_by TEXT,
+    subdivision TEXT,
+    city TEXT,
+    broadcast_area TEXT,
+    alt_names TEXT,
+    logo TEXT,
+    website TEXT,
+    url TEXT
+);
+
+insertChannel:
+INSERT INTO Channel (
+    id,
+    name,
+    country,
+    categories,
+    languages,
+    is_nsfw,
+    launched,
+    closed,
+    network,
+    owners,
+    replaced_by,
+    subdivision,
+    city,
+    broadcast_area,
+    alt_names,
+    logo,
+    website,
+    url
+) VALUES (
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?,
+    ?
+);
+
+removeAllChannels:
+DELETE FROM Channel;
+
+selectAllChannelsInfo:
+SELECT Channel.*
+FROM Channel;

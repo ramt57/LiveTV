@@ -3,6 +3,7 @@ package model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class Channel(
@@ -27,7 +28,7 @@ data class Channel(
     @SerialName("launched")
     val launched: String?,
     @SerialName("logo")
-    val logo: String,
+    val logo: String?,
     @SerialName("name")
     val name: String,
     @SerialName("network")
@@ -39,7 +40,9 @@ data class Channel(
     @SerialName("subdivision")
     val subdivision: String?,
     @SerialName("website")
-    val website: String?
+    val website: String?,
+    @Transient
+    val url: String = ""
 )
 
 val channelList = listOf<Channel>()

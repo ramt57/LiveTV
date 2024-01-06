@@ -10,52 +10,51 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import model.Channel
 import model.Stream
 
-class TVViewModel : ViewModel() {
+class TVViewModel(databaseDriverFactory: DatabaseDriverFactory) : ViewModel() {
+    private val database = Database(databaseDriverFactory)
+    private val api = IptvApi()
+
     private val _stateChannels = MutableStateFlow<List<Channel>>(emptyList())
     val channelState = _stateChannels.asStateFlow()
 
-    private val _stateStreams = MutableStateFlow<List<Stream>>(emptyList())
-
-    private val httpClient = HttpClient {
-        install(ContentNegotiation) {
-            json()
-        }
-    }
-
-    fun updateChannels() {
-        viewModelScope.launch {
-            val streamList = GetAllStream().filter { it.channel.isNotBlank() }
-            val channelList = GetAllChannels()
-
+    private suspend fun getAllChannels(forceReload: Boolean): List<Channel> {
+        val cachedChannels = database.getAllChannels()
+        return if (cachedChannels.isNotEmpty() && !forceReload) {
+            cachedChannels
+        } else {
+            val streamList = api.GetAllStream().filter { it.channel.isNotBlank() }
             // Create a map from channel ID to Stream
             val streamMap = streamList.associateBy { it.channel }
 
-            _stateStreams.value = streamList
-
-            _stateChannels.value = channelList
-                .filter { !it.isNsfw && streamMap.containsKey(it.id) }
-                .mapNotNull { channel -> streamMap[channel.id]?.let { channel } }
+            api.GetAllChannels().filter { !it.isNsfw && streamMap.containsKey(it.id) }
+                .mapNotNull { channel -> streamMap[channel.id]?.let {
+                    channel.copy(url = it.url)
+                }}.also {
+                    database.clearDatabase()
+                    database.createChannels(it)
+                }
         }
     }
 
-    fun getStreamLinkByChannelId(channelId: String): Stream? {
-        return _stateStreams.value.firstOrNull {
-            it.channel == channelId
+    fun updateChannels(forceReload: Boolean) {
+        viewModelScope.launch {
+            val channelList = getAllChannels(forceReload)
+            _stateChannels.value = channelList
+        }
+    }
+
+    fun getStreamLinkByChannelId(channelId: String): Channel? {
+        return _stateChannels.value.firstOrNull {
+            it.id == channelId
         }
     }
 
     override fun onCleared() {
-        httpClient.close()
+        api.onClose()
     }
 
-    private suspend fun GetAllChannels(): List<Channel> {
-        return httpClient.get("https://iptv-org.github.io/api/channels.json").body<List<Channel>>()
-    }
-
-    private suspend fun GetAllStream(): List<Stream> {
-        return httpClient.get("https://iptv-org.github.io/api/streams.json").body<List<Stream>>()
-    }
 }

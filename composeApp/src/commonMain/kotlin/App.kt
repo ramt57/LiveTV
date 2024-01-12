@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,11 +26,8 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import presentation.DatabaseDriverFactory
 import presentation.TVViewModel
-import ui.home.AppBarMenu
-import ui.home.AppLogo
 import ui.home.AppVideo
 import ui.home.ChannelView
-import ui.home.TabItem
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -45,21 +43,13 @@ fun App(databaseDriverFactory: DatabaseDriverFactory) {
     }
     val channelState by tvViewModel.channelState.collectAsState()
     var selectedChannel by remember { mutableStateOf(channelState.firstOrNull()?.id) }
-    var selectedTab: TabItem by remember { mutableStateOf(TabItem.Country) }
     Surface {
         MaterialTheme {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        backgroundColor = Color.Transparent,
-                        elevation = 0.dp,
                         title = {
-                            Row {
-                                AppLogo()
-                                AppBarMenu(selectedTab) {
-                                    selectedTab = it
-                                }
-                            }
+                            Text("IPTV Live TV")
                         }
                     )
                 },

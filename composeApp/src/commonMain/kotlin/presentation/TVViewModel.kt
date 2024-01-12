@@ -26,14 +26,17 @@ class TVViewModel(databaseDriverFactory: DatabaseDriverFactory) : ViewModel() {
         return if (cachedChannels.isNotEmpty() && !forceReload) {
             cachedChannels
         } else {
-            val streamList = api.GetAllStream().filter { it.channel.isNotBlank() }
-            // Create a map from channel ID to Stream
-            val streamMap = streamList.associateBy { it.channel }
+            val streamMap = api.GetAllStream().filter { it.channel.isNotBlank() }.associateBy { it.channel }
+            val blockedList = api.GetAllBlockedList().associateBy { it.channel }
 
-            api.GetAllChannels().filter { !it.isNsfw && streamMap.containsKey(it.id) }
-                .mapNotNull { channel -> streamMap[channel.id]?.let {
-                    channel.copy(url = it.url)
-                }}.also {
+            api.GetAllChannels().filter { !it.isNsfw && streamMap.containsKey(it.id) }.filterNot {
+                blockedList.containsKey(it.id)
+            }
+                .mapNotNull { channel ->
+                    streamMap[channel.id]?.let {
+                        channel.copy(url = it.url)
+                    }
+                }.also {
                     database.clearDatabase()
                     database.createChannels(it)
                 }

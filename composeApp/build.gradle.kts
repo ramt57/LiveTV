@@ -85,6 +85,9 @@ kotlin {
             implementation(libs.moko.mvvm.core)
             implementation(libs.moko.mvvm.compose)
             implementation(libs.kamel)
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenModel)
+            implementation(libs.voyager.transitions)
         }
 //        wasmJsMain.dependencies {
 //            implementation(libs.ktor.client.okhttp)
@@ -104,7 +107,7 @@ android {
         applicationId = "org.ramt57.project"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
     }
     buildFeatures {

@@ -6,6 +6,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import model.BlockedChannel
 import model.Channel
 import model.Stream
 
@@ -27,7 +28,12 @@ class IptvApi {
         return httpClient.get("https://iptv-org.github.io/api/streams.json").body<List<Stream>>()
     }
 
-    fun onClose(){
+    internal suspend fun GetAllBlockedList(): List<BlockedChannel> {
+        return httpClient.get("https://iptv-org.github.io/api/blocklist.json")
+            .body<List<BlockedChannel>>()
+    }
+
+    fun onClose() {
         httpClient.close()
     }
 }

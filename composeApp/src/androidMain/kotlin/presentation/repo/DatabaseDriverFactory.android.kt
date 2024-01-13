@@ -1,4 +1,4 @@
-package presentation
+package presentation.repo
 
 import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver

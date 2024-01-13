@@ -1,35 +1,34 @@
 package presentation
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.serialization.kotlinx.json.json
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import model.Channel
-import model.Stream
+import presentation.repo.Database
+import presentation.repo.IptvApi
 
-class TVViewModel(databaseDriverFactory: DatabaseDriverFactory) : ViewModel() {
-    private val database = Database(databaseDriverFactory)
-    private val api = IptvApi()
-
+class HomeScreenViewModel(private val database: Database, private val api: IptvApi) :
+    ScreenModel {
     private val _stateChannels = MutableStateFlow<List<Channel>>(emptyList())
     val channelState = _stateChannels.asStateFlow()
+
+    override fun onDispose() {
+        super.onDispose()
+        api.onClose()
+    }
 
     private suspend fun getAllChannels(forceReload: Boolean): List<Channel> {
         val cachedChannels = database.getAllChannels()
         return if (cachedChannels.isNotEmpty() && !forceReload) {
             cachedChannels
         } else {
-            val streamMap = api.GetAllStream().filter { it.channel.isNotBlank() }.associateBy { it.channel }
-            val blockedList = api.GetAllBlockedList().associateBy { it.channel }
+            val streamMap =
+                api.getAllStream().filter { it.channel.isNotBlank() }.associateBy { it.channel }
+            val blockedList = api.getAllBlockedList().associateBy { it.channel }
 
-            api.GetAllChannels().filter { !it.isNsfw && streamMap.containsKey(it.id) }.filterNot {
+            api.getAllChannels().filter { !it.isNsfw && streamMap.containsKey(it.id) }.filterNot {
                 blockedList.containsKey(it.id)
             }
                 .mapNotNull { channel ->
@@ -44,7 +43,7 @@ class TVViewModel(databaseDriverFactory: DatabaseDriverFactory) : ViewModel() {
     }
 
     fun updateChannels(forceReload: Boolean) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val channelList = getAllChannels(forceReload)
             _stateChannels.value = channelList
         }
@@ -55,9 +54,4 @@ class TVViewModel(databaseDriverFactory: DatabaseDriverFactory) : ViewModel() {
             it.id == channelId
         }
     }
-
-    override fun onCleared() {
-        api.onClose()
-    }
-
 }

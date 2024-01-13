@@ -1,9 +1,9 @@
-package presentation
+package presentation.repo
 
 import model.Channel
 import sqlfiles.AppDatabase
 
-internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
+class Database(databaseDriverFactory: DatabaseDriverFactory) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
     private val dbQuery = database.channelQueries
 

@@ -63,7 +63,6 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.vlcj)
-            implementation(libs.native.driver)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -72,8 +71,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.material)
+            implementation(compose.material3)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
 
@@ -82,12 +80,14 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.runtime)
             implementation(libs.kotlinx.datetime)
-            implementation(libs.moko.mvvm.core)
-            implementation(libs.moko.mvvm.compose)
             implementation(libs.kamel)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
+            implementation(libs.voyager.tab.navigator)
+            implementation(libs.voyager.bottom.sheet.navigator)
+            implementation(libs.voyager.koin)
+            implementation(libs.koin.compose)
         }
 //        wasmJsMain.dependencies {
 //            implementation(libs.ktor.client.okhttp)

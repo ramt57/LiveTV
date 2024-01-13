@@ -1,4 +1,4 @@
-package presentation
+package presentation.repo
 
 import com.squareup.sqldelight.db.SqlDriver
 

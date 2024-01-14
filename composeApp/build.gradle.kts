@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.androidx.media3.ui)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.android.driver)
+            implementation(libs.androidx.media3.exoplayer.ima)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

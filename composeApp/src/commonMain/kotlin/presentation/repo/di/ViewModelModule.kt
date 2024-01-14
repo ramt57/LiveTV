@@ -4,7 +4,7 @@ import org.koin.dsl.module
 import presentation.HomeScreenViewModel
 
 val viewModelModules = module {
-    factory {
+    single {
         HomeScreenViewModel(get(), get())
     }
 }

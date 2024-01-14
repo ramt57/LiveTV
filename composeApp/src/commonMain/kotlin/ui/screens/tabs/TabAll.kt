@@ -55,7 +55,7 @@ private fun AllChannelsList(
     LaunchedEffect(tvViewModel) {
         tvViewModel.updateChannels(false)
     }
-    val channelState by tvViewModel.channelState.collectAsState()
+    val channelState by tvViewModel.filteredChannels.collectAsState()
     var selectedChannel by remember { mutableStateOf(channelState.firstOrNull()?.id) }
     Column {
         LazyVerticalStaggeredGrid(

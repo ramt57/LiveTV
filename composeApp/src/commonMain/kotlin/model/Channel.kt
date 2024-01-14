@@ -43,6 +43,22 @@ data class Channel(
     val website: String?,
     @Transient
     val url: String = ""
-)
+) : SearchableItem {
+    override val keyId: String
+        get() = id
+
+    override fun doesMatchQuery(query: String): Boolean {
+        val matchCombination = listOfNotNull(
+            name,
+            network,
+            country,
+            categories.joinToString { "," },
+            languages.joinToString { "," },
+            altNames?.joinToString { "," }
+        )
+
+        return matchCombination.any { it.contains(query, ignoreCase = true) }
+    }
+}
 
 val channelList = listOf<Channel>()

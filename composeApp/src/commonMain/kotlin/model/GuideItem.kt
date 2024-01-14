@@ -16,4 +16,11 @@ data class GuideItem(
     val siteId: String,
     @SerialName("site_name")
     val siteName: String
-)
+): SearchableItem {
+    override val keyId: String
+        get() = channel+ site
+
+    override fun doesMatchQuery(query: String): Boolean {
+        return false
+    }
+}

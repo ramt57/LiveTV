@@ -10,4 +10,11 @@ data class Language(
     val code: String,
     @SerialName("name")
     val name: String
-)
+): SearchableItem {
+    override val keyId: String
+        get() = code
+
+    override fun doesMatchQuery(query: String): Boolean {
+        return false
+    }
+}

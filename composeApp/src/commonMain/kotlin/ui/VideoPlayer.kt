@@ -16,23 +16,6 @@ data class Progress(
     val timeMillis: Long
 )
 
-@Composable
-fun VideoPlayer(
-    url: String,
-    state: VideoPlayerState,
-    modifier: Modifier = Modifier,
-    onFinish: (() -> Unit)? = null
-) = VideoPlayerImpl(
-    url = url,
-    isResumed = state.isResumed,
-    volume = state.volume,
-    speed = state.speed,
-    seek = state.seek,
-    isFullscreen = state.isFullscreen,
-    progressState = state._progress,
-    modifier = modifier,
-    onFinish = onFinish
-)
 
 @Composable
 internal expect fun VideoPlayerImpl(

@@ -10,4 +10,11 @@ data class CategoryItem(
     val id: String,
     @SerialName("name")
     val name: String
-)
+): SearchableItem {
+    override val keyId: String
+        get() = id
+
+    override fun doesMatchQuery(query: String): Boolean {
+        return false
+    }
+}

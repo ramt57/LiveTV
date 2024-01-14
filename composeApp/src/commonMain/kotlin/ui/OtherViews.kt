@@ -25,12 +25,12 @@ import io.kamel.core.config.KamelConfig
 import io.kamel.core.config.httpFetcher
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import io.ktor.http.Url
 import model.Channel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ChannelView(channel: Channel, onChannelClicked: (String) -> Unit) {
     Card(
@@ -48,28 +48,33 @@ fun ChannelView(channel: Channel, onChannelClicked: (String) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            KamelConfig {
-                httpFetcher {
-                    httpCache(DefaultHttpCacheSize)
-                }
-            }
-            KamelImage(
-                resource = asyncPainterResource(data = channel.logo ?: ""),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-                modifier = Modifier.wrapContentHeight(),
-                animationSpec = tween(),
-                onLoading = { progress -> CircularProgressIndicator(progress) },
-                onFailure = { _ ->
-                    val fallbackPainter = painterResource("logo.xml")
-                    Image(fallbackPainter, contentDescription = "failed loading image")
-                }
-            )
+            AsyncImage(Modifier.wrapContentHeight(), channel.logo?:"")
             Text(text = channel.name)
         }
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun AsyncImage(modifier: Modifier, url: String){
+    KamelConfig {
+        httpFetcher {
+            httpCache(DefaultHttpCacheSize)
+        }
+    }
+    KamelImage(
+        resource = asyncPainterResource(data = url),
+        contentDescription = null,
+        contentScale = ContentScale.Inside,
+        modifier = modifier,
+        animationSpec = tween(),
+        onLoading = { progress -> CircularProgressIndicator(progress) },
+        onFailure = { _ ->
+            val fallbackPainter = painterResource("logo.xml")
+            Image(fallbackPainter, contentDescription = "failed loading image")
+        }
+    )
+}
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AppVideo(channel: Channel?) {

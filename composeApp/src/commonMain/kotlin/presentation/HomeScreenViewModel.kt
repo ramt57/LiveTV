@@ -8,11 +8,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import model.CategoryItem
 import model.Channel
 import model.CountryItem
+import model.GuideItem
 import model.Language
 import presentation.repo.Database
 import presentation.repo.IptvApi
@@ -105,7 +107,7 @@ class HomeScreenViewModel(private val database: Database, private val api: IptvA
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    private val _guideList = MutableStateFlow<List<Language>>(emptyList())
+    private val _guideList = MutableStateFlow<List<GuideItem>>(emptyList())
 
     @OptIn(FlowPreview::class)
     val filteredGuideList = searchText.debounce(500L).combine(_guideList) { search, guide ->
@@ -150,6 +152,22 @@ class HomeScreenViewModel(private val database: Database, private val api: IptvA
         }
     }
 
+    private suspend fun getAllCategory(forceReload: Boolean): List<CategoryItem> {
+        return api.getCategoryList()
+    }
+
+    private suspend fun getAllCountry(forceReload: Boolean): List<CountryItem> {
+        return api.getCountriesList()
+    }
+
+    private suspend fun getAllLanguage(forceReload: Boolean): List<Language> {
+        return api.getLanguageList()
+    }
+
+    private suspend fun getAllGuide(forceReload: Boolean): List<GuideItem> {
+        return api.getChannelGuideList()
+    }
+
     fun updateChannels(forceReload: Boolean) {
         screenModelScope.launch {
             val channelList = getAllChannels(forceReload)
@@ -157,9 +175,27 @@ class HomeScreenViewModel(private val database: Database, private val api: IptvA
         }
     }
 
-    fun getStreamLinkByChannelId(channelId: String): Channel? {
-        return _stateChannels.value.firstOrNull {
-            it.id == channelId
+    fun updateCategories(forceReload: Boolean) {
+        screenModelScope.launch {
+            _categoryList.value = getAllCategory(true)
+        }
+    }
+
+    fun updateCountries(forceReload: Boolean) {
+        screenModelScope.launch {
+            _countryList.value = getAllCountry(true)
+        }
+    }
+
+    fun updateLanguages(forceReload: Boolean) {
+        screenModelScope.launch {
+            _languageList.value = getAllLanguage(true)
+        }
+    }
+
+    fun updateGuides(forceReload: Boolean) {
+        screenModelScope.launch {
+            _guideList.value = getAllGuide(true)
         }
     }
 }

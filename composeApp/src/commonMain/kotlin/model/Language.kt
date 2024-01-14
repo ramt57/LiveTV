@@ -15,6 +15,7 @@ data class Language(
         get() = code
 
     override fun doesMatchQuery(query: String): Boolean {
-        return false
+        val matchCombination = listOfNotNull(name, code)
+        return matchCombination.any { it.contains(query, ignoreCase = true) }
     }
 }

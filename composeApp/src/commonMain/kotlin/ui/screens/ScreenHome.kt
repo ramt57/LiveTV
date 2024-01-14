@@ -31,6 +31,9 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import presentation.HomeScreenViewModel
+import ui.ChannelCategory
+import ui.ChannelCountry
+import ui.ChannelLanguage
 import ui.ChannelSearch
 import ui.screens.tabs.TabAll
 import ui.screens.tabs.TabCategory
@@ -56,12 +59,12 @@ class ScreenHome() : Screen {
                             Text("Live TV")
                         },
                         navigationIcon = {
-                            IconButton(onClick = { /* do something */ }) {
-                                Icon(
-                                    imageVector = Icons.Filled.ArrowBack,
-                                    contentDescription = "Localized description"
-                                )
-                            }
+//                            IconButton(onClick = { /* do something */ }) {
+//                                Icon(
+//                                    imageVector = Icons.Filled,
+//                                    contentDescription = "Localized description"
+//                                )
+//                            }
                         },
                         actions = {},
                         scrollBehavior = scrollBehavior,
@@ -71,9 +74,9 @@ class ScreenHome() : Screen {
                     NavigationBar {
                         TabItem(TabAll(navigator))
                         TabItem(TabCategory(navigator))
-                        TabItem(TabCountry)
-                        TabItem(TabLanguage)
-                        TabItem(TabFavourite)
+                        TabItem(TabCountry(navigator))
+                        TabItem(TabLanguage(navigator))
+                        TabItem(TabFavourite(navigator))
                     }
                 }
             ) { innerPadding ->
@@ -84,9 +87,9 @@ class ScreenHome() : Screen {
                     val placeholderText = LocalTabNavigator.current.current.options.title
                     when (LocalTabNavigator.current.current) {
                         is TabAll -> ChannelSearch(viewModel, placeholderText)
-                        is TabCategory -> {}
-                        is TabCountry -> {}
-                        is TabLanguage -> {}
+                        is TabCategory -> ChannelCategory(viewModel, placeholderText)
+                        is TabCountry -> ChannelCountry(viewModel, placeholderText)
+                        is TabLanguage -> ChannelLanguage(viewModel, placeholderText)
                         is TabFavourite -> {}
                     }
                     CurrentTab()

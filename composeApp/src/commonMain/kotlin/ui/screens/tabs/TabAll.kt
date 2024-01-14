@@ -3,6 +3,7 @@ package ui.screens.tabs
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -59,7 +60,7 @@ private fun AllChannelsList(
     var selectedChannel by remember { mutableStateOf(channelState.firstOrNull()?.id) }
     Column {
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(200.dp),
+            columns = StaggeredGridCells.Adaptive(100.dp),
             verticalItemSpacing = 4.dp,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             content = {
@@ -72,7 +73,7 @@ private fun AllChannelsList(
                     }
                 }
             },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
         )
     }
 }

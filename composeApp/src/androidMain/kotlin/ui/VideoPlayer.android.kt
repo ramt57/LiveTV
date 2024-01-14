@@ -1,6 +1,7 @@
 package ui
 
 import android.net.Uri
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -34,9 +35,9 @@ internal actual fun VideoPlayerImpl(
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(MediaItem.fromUri(Uri.parse(url)))
+            prepare()
         }
     }
-
 
     var lifecycle by remember {
         mutableStateOf(Lifecycle.Event.ON_CREATE)
@@ -51,17 +52,15 @@ internal actual fun VideoPlayerImpl(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
-    AndroidView(modifier = modifier, factory = { context ->
+    AndroidView(modifier = modifier.wrapContentHeight(), factory = { context ->
         PlayerView(context).apply {
             this.player = exoPlayer
         }
     }, update = {
         when (lifecycle) {
             Lifecycle.Event.ON_START -> {
-                if (isResumed) {
-                    it.onResume()
-                    exoPlayer.play()
-                }
+                it.onResume()
+                exoPlayer.play()
             }
 
             Lifecycle.Event.ON_RESUME -> {

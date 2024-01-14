@@ -15,6 +15,7 @@ data class CategoryItem(
         get() = id
 
     override fun doesMatchQuery(query: String): Boolean {
-        return false
+        val matchCombination = listOfNotNull(name, id)
+        return matchCombination.any { it.contains(query, ignoreCase = true) }
     }
 }

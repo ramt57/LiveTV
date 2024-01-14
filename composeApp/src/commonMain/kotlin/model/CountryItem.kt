@@ -8,11 +8,12 @@ data class CountryItem(
     val flag: String,
     val languages: List<String>,
     val name: String
-): SearchableItem {
+) : SearchableItem {
     override val keyId: String
-        get() = code+name
+        get() = code + name
 
     override fun doesMatchQuery(query: String): Boolean {
-        return false
+        val matchCombination = listOfNotNull(name, code, languages.joinToString { "," })
+        return matchCombination.any { it.contains(query, ignoreCase = true) }
     }
 }

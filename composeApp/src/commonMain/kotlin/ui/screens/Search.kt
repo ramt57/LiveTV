@@ -1,4 +1,4 @@
-package ui.home.screens
+package ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth

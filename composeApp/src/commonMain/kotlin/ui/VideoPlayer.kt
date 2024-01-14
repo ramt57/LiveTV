@@ -1,4 +1,4 @@
-package ui.home
+package ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -6,7 +6,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.listSaver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
@@ -55,7 +54,7 @@ fun rememberVideoPlayerState(
     volume: Float = 1f,
     isResumed: Boolean = true,
     isFullscreen: Boolean = false
-): VideoPlayerState  {
+): VideoPlayerState {
    return VideoPlayerState(
         seek,
         speed,

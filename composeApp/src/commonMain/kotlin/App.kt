@@ -1,4 +1,3 @@
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
@@ -10,14 +9,15 @@ import presentation.repo.DatabaseDriverFactory
 import presentation.repo.di.apiModule
 import presentation.repo.di.httpClientModule
 import presentation.repo.di.viewModelModules
-import ui.home.screens.ScreenHome
+import ui.screens.ScreenHome
+import ui.theme.AppTheme
 
 @Composable
 fun App(databaseDriverFactory: DatabaseDriverFactory) {
     KoinApplication(application = {
         modules(appModule(databaseDriverFactory))
     }) {
-        MaterialTheme {
+        AppTheme {
             Navigator(screen = ScreenHome()) {
                 SlideTransition(it)
             }

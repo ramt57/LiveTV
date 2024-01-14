@@ -54,6 +54,9 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.androidx.media3.exoplayer)
             implementation(libs.androidx.media3.exoplayer.dash)
+            implementation(libs.androidx.media3.exoplayer.hls)
+            implementation(libs.androidx.media3.exoplayer.rtsp)
+            implementation(libs.androidx.media3.exoplayer.smoothstreaming)
             implementation(libs.androidx.media3.ui)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.android.driver)
@@ -64,6 +67,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.vlcj)
         }
+
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.native.driver)
@@ -153,7 +157,9 @@ compose.desktop {
 //}
 
 sqldelight {
-    database("AppDatabase") {
-        packageName = "sqlfiles"
+    databases {
+        create("AppDatabase") {
+            packageName.set("sqlfiles")
+        }
     }
 }

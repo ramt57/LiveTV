@@ -1,9 +1,10 @@
-package ui.home
+package ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 
+@Composable
 internal actual fun VideoPlayerImpl(
     url: String,
     isResumed: Boolean,
@@ -15,4 +16,5 @@ internal actual fun VideoPlayerImpl(
     modifier: Modifier,
     onFinish: (() -> Unit)?
 ) {
+    TODO()
 }

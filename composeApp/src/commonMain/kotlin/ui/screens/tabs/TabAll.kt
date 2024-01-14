@@ -1,4 +1,4 @@
-package ui.home.screens.tabs
+package ui.screens.tabs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,18 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import presentation.repo.Database
-import presentation.repo.DatabaseDriverFactory
 import presentation.HomeScreenViewModel
-import presentation.repo.IptvApi
-import ui.home.AppVideo
-import ui.home.ChannelView
-import ui.home.screens.ScreenChannelDetail
+import ui.ChannelView
+import ui.screens.ScreenWatchChannel
 
 class TabAll(private val navigator: Navigator) : Tab {
     @Composable
@@ -63,8 +58,6 @@ private fun AllChannelsList(
     val channelState by tvViewModel.channelState.collectAsState()
     var selectedChannel by remember { mutableStateOf(channelState.firstOrNull()?.id) }
     Column {
-        val Channel = selectedChannel?.let { tvViewModel.getStreamLinkByChannelId(it) }
-        AppVideo(Channel)
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(200.dp),
             verticalItemSpacing = 4.dp,
@@ -75,7 +68,7 @@ private fun AllChannelsList(
                 }) { channel ->
                     ChannelView(channel = channel) {
                         selectedChannel = it
-                        navigator.push(ScreenChannelDetail(channel))
+                        navigator.push(ScreenWatchChannel(channel))
                     }
                 }
             },

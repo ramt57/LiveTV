@@ -1,4 +1,4 @@
-package ui.home.screens
+package ui.screens
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image

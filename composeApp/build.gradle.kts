@@ -1,27 +1,15 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+//    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.sqlDelight)
 }
 
 kotlin {
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        moduleName = "composeApp"
-//        browser {
-//            commonWebpackConfig {
-//                outputFileName = "composeApp.js"
-//            }
-//        }
-//        binaries.executable()
-//    }
-
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -29,8 +17,6 @@ kotlin {
             }
         }
     }
-
-    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -44,9 +30,6 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
-//        val wasmJsMain by getting
-
         androidMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
@@ -62,13 +45,6 @@ kotlin {
             implementation(libs.android.driver)
             implementation(libs.androidx.media3.exoplayer.ima)
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.vlcj)
-        }
-
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.native.driver)
@@ -77,13 +53,11 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
-            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.material)
             implementation(compose.components.resources)
-
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.runtime)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kamel)
             implementation(libs.voyager.navigator)
@@ -94,9 +68,6 @@ kotlin {
             implementation(libs.voyager.koin)
             implementation(libs.koin.compose)
         }
-//        wasmJsMain.dependencies {
-//            implementation(libs.ktor.client.okhttp)
-//        }
     }
 }
 
@@ -140,22 +111,6 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
-
-compose.desktop {
-    application {
-        mainClass = "MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.ramt57.project"
-            packageVersion = "1.0.0"
-        }
-    }
-}
-
-//compose.experimental {
-//    web.application {}
-//}
 
 sqldelight {
     databases {

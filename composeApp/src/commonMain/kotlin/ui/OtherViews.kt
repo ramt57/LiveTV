@@ -27,7 +27,9 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import io.ktor.http.Url
 import model.Channel
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -54,7 +56,7 @@ fun ChannelView(channel: Channel, onChannelClicked: (String) -> Unit) {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, InternalResourceApi::class)
 @Composable
 fun AsyncImage(modifier: Modifier, url: String){
     KamelConfig {
@@ -69,10 +71,10 @@ fun AsyncImage(modifier: Modifier, url: String){
         modifier = modifier,
         animationSpec = tween(),
         onLoading = { progress -> CircularProgressIndicator(progress) },
-        onFailure = { _ ->
-            val fallbackPainter = painterResource("logo.xml")
-            Image(fallbackPainter, contentDescription = "failed loading image")
-        }
+//        onFailure = { _ ->
+//            val fallbackPainter = painterResource(DrawableResource("logo.xml"))
+//            Image(fallbackPainter, contentDescription = "failed loading image")
+//        }
     )
 }
 @OptIn(ExperimentalResourceApi::class)

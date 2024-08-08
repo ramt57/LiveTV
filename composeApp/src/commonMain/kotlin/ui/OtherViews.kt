@@ -80,21 +80,11 @@ fun AsyncImage(modifier: Modifier, url: String){
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AppVideo(channel: Channel?) {
-    val state = rememberVideoPlayerState()
     Column {
         channel?.let {
             VideoPlayerImpl(
                 url = it.url,
-                isResumed = state.isResumed,
-                volume = state.volume,
-                speed = state.speed,
-                seek = state.seek,
-                isFullscreen = state.isFullscreen,
-                progressState = state._progress,
-                onFinish = state::stopPlayback,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
+                metadata = it.name?:it.website?:""
             )
         }
     }

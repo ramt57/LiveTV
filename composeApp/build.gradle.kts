@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-//    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.sqlDelight)
 }
@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.android.driver)
             implementation(libs.androidx.media3.exoplayer.ima)
+            implementation(libs.compose.video.player)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
